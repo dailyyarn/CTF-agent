@@ -1,21 +1,22 @@
 # CTF Agent
 
-AI-powered CTF runtime for authorized targets, with a single MCP hub, reproducible workspaces, embedded skills, and optional remote helpers.
+一个用于 CTF 的 agent，支持 `web`、`misc`、`reverse`、`pwn`、`crypto`、`osint` 方向，目前能力仍在持续完善。
 
-公开版目标是尽量保留作者本机能力，而不是做一个被阉割的 share 版。当前仓库保留了 CLI、MCP Hub、AI solver、fastest 模式、hard pwn 流程、browser MCP、embedded skills、solved export、测试集，以及远程 helper 接口；不附带私有 wiki、私有主机拓扑、个人 sidecar 环境或任何运行时凭据。
+This repository keeps a practical public edition of the agent runtime, with a single MCP hub, reproducible workspaces, embedded skills, solved export, and optional remote helpers.
 
 ## Why CTF Agent
 
-- `ctf-agent` 是唯一执行主体，统一 CLI、MCP、Web console、workspace 和 triage board。
-- 顶层只暴露 `ctf-agent-mcp`，把嵌套 MCP、工具链和远程能力收敛在同一个入口后面。
-- 公共仓库内置 `embedded_ctf_skills`，开箱就有战术 playbook，不必先额外拉一个 skills 仓库。
-- 默认路径公开安全，能力接口保留完整，方便别人装上自己的 MCP / wiki / remote helper 后尽量接近作者本机效果。
+- `ctf-agent` 是统一执行主体，复用同一套 CLI、MCP、Web console、workspace 和 triage board。
+- 顶层入口收敛到 `ctf-agent-mcp`，把嵌套 MCP、工具链和远程能力统一到一个 hub 后面。
+- 仓库内置 `embedded_ctf_skills`，开箱就有基础战术 playbook。
+- 默认路径采用公开安全的相对目录，方便别人接入自己的 MCP、wiki 和 remote helper。
 
 ## Key Capabilities
 
 | Area | Public Edition |
 | --- | --- |
 | Entry points | `ctf-agent`, `ctf-agent-mcp`, `ctf-agent-browser-mcp`, `ctf-agent serve-web` |
+| Categories | `web`, `misc`, `reverse`, `pwn`, `crypto`, `osint` |
 | Solver paths | AI loop, web solver, binary solver, specialized solvers |
 | Knowledge | Embedded `ctf-skills` + optional `rag.wiki_root` |
 | Pwn / Reverse | hard pwn families, remote helper interface, reverse MCP hooks |
@@ -49,8 +50,8 @@ ctf-agent serve-web
 
 1. 复制 [local_config.example.json](local_config.example.json) 到本地 `local_config.json`
 2. 填好 LLM、toolkit、可选 wiki 路径
-3. 跑一次 `ctf-agent doctor`
-4. 用编辑器接 `ctf-agent-mcp`，或者直接开 `ctf-agent serve-web`
+3. 运行 `ctf-agent doctor`
+4. 用编辑器连接 `ctf-agent-mcp`，或者直接启动 `ctf-agent serve-web`
 
 更多配置说明：
 
@@ -74,18 +75,18 @@ Authorized challenge
 
 推荐高层入口：
 
-- `run_ctf_session`: 主会话入口
-- `continue_ctf_session`: 轮询 / 续做
-- `auto_solve_ctf`: 一句话直接做
-- `get_ctf_board_summary`: 查看进度摘要
+- `run_ctf_session`
+- `continue_ctf_session`
+- `auto_solve_ctf`
+- `get_ctf_board_summary`
 
 ## Screenshots
 
-下面三张图都来自公开安全 demo，不包含私有主机、私有工作区或真实靶标信息。
+下面三张图都来自公开安全 demo，不包含私有主机、私有工作区或真实目标信息。
 
 ![CLI overview](docs/assets/cli-overview.png)
 
-_CLI / MCP / serve-web 入口能力面，一眼看到公开版保留了哪些主命令。_
+_CLI / MCP / serve-web 入口能力面。_
 
 ![Web console home](docs/assets/web-console-home.png)
 
@@ -122,11 +123,7 @@ challenge -> intake/router/autopilot
 - Embedded skills: [ctf_agent/knowledge/embedded_ctf_skills](ctf_agent/knowledge/embedded_ctf_skills)
 - Optional personal wiki: configured through `rag.wiki_root`
 
-公开仓库只内嵌 skills，不附带个人 wiki / writeup。想把效果补到更接近作者本机，优先补这三块：
-
-1. 强一点的 LLM
-2. 自己的 `rag.wiki_root`
-3. 自己的 reverse / browser / pwn 相关 MCP 和 remote helper
+公开仓库只内嵌 skills，不附带个人 wiki / writeup。
 
 ## Fastest Mode
 
