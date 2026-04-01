@@ -1,22 +1,21 @@
 # CTF Agent
 
-一个用于 CTF 的 agent，支持 `web`、`misc`、`reverse`、`pwn`、`crypto`、`osint` 方向，目前能力仍在持续完善。
+一个用于CTF的agent  支持web、misc、reverse、pwn、crypto、osint方向 目前能力还需完善 可选择接入一些工具mcp
 
-This repository keeps a practical public edition of the agent runtime, with a single MCP hub, reproducible workspaces, embedded skills, solved export, and optional remote helpers.
+This repository keeps a practical public edition of the agent runtime, with a single MCP hub, reproducible workspaces, embedded skills, solved export, and optional remote helpers. You can choose to connect some tools MCP.
 
 ## Why CTF Agent
 
-- `ctf-agent` 是统一执行主体，复用同一套 CLI、MCP、Web console、workspace 和 triage board。
-- 顶层入口收敛到 `ctf-agent-mcp`，把嵌套 MCP、工具链和远程能力统一到一个 hub 后面。
-- 仓库内置 `embedded_ctf_skills`，开箱就有基础战术 playbook。
-- 默认路径采用公开安全的相对目录，方便别人接入自己的 MCP、wiki 和 remote helper。
+- `ctf-agent` 是唯一执行主体，统一 CLI、MCP、Web console、workspace 和 triage board。
+- 顶层只暴露 `ctf-agent-mcp`，把嵌套 MCP、工具链和远程能力收敛在同一个入口后面。
+- 公共仓库内置 `embedded_ctf_skills`，开箱就有战术 playbook，不必先额外拉一个 skills 仓库。
+- 默认路径公开安全，能力接口保留完整，方便别人装上自己的 MCP / wiki / remote helper 后尽量接近作者本机效果。
 
 ## Key Capabilities
 
 | Area | Public Edition |
 | --- | --- |
 | Entry points | `ctf-agent`, `ctf-agent-mcp`, `ctf-agent-browser-mcp`, `ctf-agent serve-web` |
-| Categories | `web`, `misc`, `reverse`, `pwn`, `crypto`, `osint` |
 | Solver paths | AI loop, web solver, binary solver, specialized solvers |
 | Knowledge | Embedded `ctf-skills` + optional `rag.wiki_root` |
 | Pwn / Reverse | hard pwn families, remote helper interface, reverse MCP hooks |
@@ -48,53 +47,9 @@ ctf-agent serve-web
 
 最短公开工作流：
 
-1. 复制 [local_config.example.json](local_config.example.json) 到本地 `local_config.json`
-2. 填好 LLM、toolkit、可选 wiki 路径
-3. 运行 `ctf-agent doctor`
-4. 用编辑器连接 `ctf-agent-mcp`，或者直接启动 `ctf-agent serve-web`
+- `auto_solve_ctf`: 一句话直接做
+- `get_ctf_board_summary`: 查看进度摘要
 
-更多配置说明：
-
-- [Public Setup](docs/public_setup.md)
-- [Editor Integration](docs/editor_integration.md)
-- [Remote Helpers](docs/remote_helpers.md)
-- [MCP Catalog](docs/mcp_catalog.md)
-- [Solved Output](docs/solved_output.md)
-- [Fastest Mode](docs/fastest_mode.md)
-
-## Demo Workflow
-
-```text
-Authorized challenge
-  -> ctf-agent-mcp / ctf-agent serve-web
-  -> intake + router + solver runtime
-  -> tools / MCP / optional remote helper
-  -> triage_board.json + notes.md + artifacts
-  -> solved export under ./agent-wp
-```
-
-推荐高层入口：
-
-- `run_ctf_session`
-- `continue_ctf_session`
-- `auto_solve_ctf`
-- `get_ctf_board_summary`
-
-## Screenshots
-
-下面三张图都来自公开安全 demo，不包含私有主机、私有工作区或真实目标信息。
-
-![CLI overview](docs/assets/cli-overview.png)
-
-_CLI / MCP / serve-web 入口能力面。_
-
-![Web console home](docs/assets/web-console-home.png)
-
-_本地 Web console 首页，展示 intake 表单、recent runs 和 canonical task template。_
-
-![Demo run board](docs/assets/demo-run-board.png)
-
-_Demo triage board，展示 findings、candidate flags、artifacts、next actions 和工具使用轨迹。_
 
 ## Architecture
 
@@ -123,7 +78,6 @@ challenge -> intake/router/autopilot
 - Embedded skills: [ctf_agent/knowledge/embedded_ctf_skills](ctf_agent/knowledge/embedded_ctf_skills)
 - Optional personal wiki: configured through `rag.wiki_root`
 
-公开仓库只内嵌 skills，不附带个人 wiki / writeup。
 
 ## Fastest Mode
 
@@ -131,7 +85,6 @@ challenge -> intake/router/autopilot
 
 - `fastest`
 - `最快`
-- `搏一把`
 - `speedrun`
 
 命中后会优先走最短链路：
@@ -139,7 +92,6 @@ challenge -> intake/router/autopilot
 - 尽量跳过长链知识检索
 - 不强制 preview / template 往返
 - 输出更紧凑
-- `pwn` 优先 remote-first
 
 ## Hard Pwn
 
@@ -160,5 +112,28 @@ The upstream `LICENSE` and `README.md` are preserved inside the embedded directo
 ## Safety Boundary
 
 - Only for authorized CTF, lab, and private research targets
-- Do not commit `local_config.json`, remote credentials, personal wiki data, or sidecar environments
-- Remote helpers and nested MCP servers are operator-managed integrations, not bundled secrets
+- Do not commit `local_config.json`, 
+1. 复制 [local_config.example.json](local_config.example.json) 到本地 `local_config.json`
+2. 填好 LLM、toolkit、可选 wiki 路径
+3. 跑一次 `ctf-agent doctor`
+4. 用编辑器接 `ctf-agent-mcp`，或者直接开 `ctf-agent serve-web`
+
+更多配置说明：
+
+- [Public Setup](docs/public_setup.md)
+- [Editor Integration](docs/editor_integration.md)
+- [Remote Helpers](docs/remote_helpers.md)
+- [MCP Catalog](docs/mcp_catalog.md)
+- [Solved Output](docs/solved_output.md)
+- [Fastest Mode](docs/fastest_mode.md)
+
+## Demo Workflow
+
+```text
+Authorized challenge
+  -> ctf-agent-mcp / ctf-agent serve-web
+  -> intake + router + solver runtime
+  -> tools / MCP / optional remote helper
+  -> triage_board.json + notes.md + artifacts
+  -> solved export under ./agent-wp
+```
