@@ -1,0 +1,177 @@
+{
+  "workspace_root": "./ctf-agent-output",
+  "toolkit_root": "./ctf-toolkit",
+  "oob_base_url": "${CTF_AGENT_OOB_BASE_URL}",
+  "oob_poll_url_template": "${CTF_AGENT_OOB_POLL_URL_TEMPLATE}",
+  "oob_auth_token": "${CTF_AGENT_OOB_AUTH_TOKEN}",
+  "oob_auth_header": "Authorization",
+  "auto_run_sqlmap": false,
+  "language": "zh-CN",
+  "mcp_timeout": 25.0,
+  "preferred_browser_mcp": "browser-use",
+  "preferred_reverse_mcp": "ida-pro-mcp",
+  "browser": {
+    "kind": "${CTF_AGENT_BROWSER_KIND}",
+    "binary": "${CTF_AGENT_BROWSER_BINARY}",
+    "headless": true
+  },
+  "web_policy": {
+    "max_rounds": 6,
+    "upload_probe_limit": 3,
+    "login_attempt_limit": 5,
+    "sqli_target_limit": 5,
+    "auto_use_browser_mcp": true,
+    "browser_login_attempt_limit": 3,
+    "browser_upload_attempt_limit": 2
+  },
+  "remote_policy": {
+    "auto_select_for_binary": true,
+    "auto_select_for_web": false,
+    "auto_select_for_misc": false,
+    "require_public_target_for_web": true,
+    "disable_local_wsl_runner": true,
+    "pwn_remote_first": true,
+    "preferred_hosts_by_category": {},
+    "prefer_keywords": [
+      "ubuntu",
+      "debian"
+    ],
+    "fallback_keywords": [
+      "centos",
+      "rocky",
+      "alma"
+    ]
+  },
+  "editor_policy": {
+    "single_hub": true,
+    "server_name": "ctf-agent",
+    "auto_tool": "run_ctf_session",
+    "auto_background_policy": {
+      "default_mode": "sync",
+      "categories": [
+        "re",
+        "reverse",
+        "pwn"
+      ],
+      "attachment_count_threshold": 4,
+      "attachment_bytes_threshold": 15728640,
+      "round_threshold": 8,
+      "remote_host": true,
+      "browser_mcp_for_web": true
+    },
+    "template_tool": "get_ctf_task_template",
+    "recommended_entry_tool": "submit_ctf_task",
+    "recommended_background_tool": "start_ctf_task",
+    "status_tool": "get_ctf_task_status",
+    "continue_tool": "continue_ctf_session",
+    "board_summary_tool": "get_ctf_board_summary",
+    "artifact_tool": "read_ctf_run_artifact",
+    "cancel_tool": "cancel_ctf_run",
+    "max_exposed_tools": 20
+  },
+  "knowledge_pack": {
+    "enabled": true,
+    "mode": "embedded",
+    "version": "2026-03-23",
+    "default_depth": "standard"
+  },
+  "speed_profiles": {
+    "fastest": {
+      "enabled": true,
+      "skip_knowledge": true,
+      "max_tool_calls": 4,
+      "pwn_remote_only": true,
+      "compact_output": true,
+      "skip_preview": true,
+      "prefer_one_shot_scripts": true
+    }
+  },
+  "export_policy": {
+    "enabled": true,
+    "root": "./agent-wp",
+    "duplicate_policy": "increment",
+    "emit_flag_first": true,
+    "copy_artifacts": true
+  },
+  "llm": {
+    "enabled": true,
+    "api_key": "${CTF_AGENT_LLM_API_KEY}",
+    "base_url": "${CTF_AGENT_LLM_BASE_URL}",
+    "model": "${CTF_AGENT_LLM_MODEL}",
+    "temperature": 0.2,
+    "max_tokens": 4096,
+    "timeout": 90
+  },
+  "rag": {
+    "enabled": true,
+    "skills_root": "auto",
+    "wiki_root": "./ctf-agent-wiki"
+  },
+  "ai_solver": {
+    "enabled": true,
+    "max_steps": 25,
+    "max_tokens": 120000,
+    "code_timeout": 30,
+    "auto_route_categories": [
+      "misc"
+    ],
+    "default_mode": "auto",
+    "python_bin": "python"
+  },
+  "mcp_servers": [
+    {
+      "name": "ida-pro-mcp",
+      "transport": "stdio",
+      "command": "${CTF_AGENT_IDA_MCP_PYTHON}",
+      "args": [
+        "${CTF_AGENT_IDA_MCP_SERVER}"
+      ],
+      "enabled": false,
+      "priority": 10,
+      "notes": "Install ida-pro-mcp into a dedicated sidecar, then set CTF_AGENT_IDA_MCP_PYTHON and CTF_AGENT_IDA_MCP_SERVER."
+    },
+    {
+      "name": "ghidra-mcp",
+      "transport": "stdio",
+      "command": "python",
+      "args": [
+        "-m",
+        "ghidra_mcp"
+      ],
+      "enabled": false,
+      "priority": 20,
+      "notes": "Enable after installing a local ghidra_mcp package."
+    },
+    {
+      "name": "browser-use",
+      "transport": "stdio",
+      "command": "python",
+      "args": [
+        "-m",
+        "ctf_agent.browser_mcp_server"
+      ],
+      "enabled": true,
+      "priority": 10,
+      "env": {
+        "CTF_AGENT_BROWSER_KIND": "${CTF_AGENT_BROWSER_KIND}",
+        "CTF_AGENT_BROWSER_BINARY": "${CTF_AGENT_BROWSER_BINARY}"
+      },
+      "notes": "Project-local browser MCP used for login flows, SPA discovery, and upload reproduction."
+    },
+    {
+      "name": "x64dbg-automate",
+      "transport": "stdio",
+      "command": "${CTF_AGENT_X64DBG_MCP_PYTHON}",
+      "args": [
+        "-m",
+        "x64dbg_automate.mcp_server"
+      ],
+      "enabled": false,
+      "priority": 15,
+      "env": {
+        "X64DBG_PATH": "${CTF_AGENT_X64DBG_PATH}"
+      },
+      "notes": "Enable after installing x64dbg_automate[mcp] in a dedicated sidecar environment."
+    }
+  ]
+}

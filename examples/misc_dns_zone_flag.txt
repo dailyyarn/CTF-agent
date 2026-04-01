@@ -1,0 +1,3 @@
+intel-lab.example.org IN TXT "flag{dns_inline}"
+intel-lab.example.org IN MX 10 mail.intel-lab.example.org
+intel-lab.example.org IN NS ns1.intel-lab.example.org

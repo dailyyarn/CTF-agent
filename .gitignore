@@ -1,0 +1,14 @@
+local_config.json
+.sidecars/
+workspaces_test/
+ctf_agent.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+.serve_web_*.pid
+dist/
+build/
+.pytest_cache/
+.venv/
+ctf-agent-output/
+agent-wp/

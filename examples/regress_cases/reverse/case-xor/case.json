@@ -1,0 +1,5 @@
+{
+  "title": "regression-dir-reverse-xor",
+  "attachment": "F:/codex/ctf-agent/examples/mock_reverse_xor.bin",
+  "expected_flag": "flag{mock_reverse_xor}"
+}

@@ -1,0 +1,10 @@
+{
+  "contest_id": "demo",
+  "challenge_id": "web-001",
+  "title": "Warmup Web",
+  "category": "web",
+  "description": "Find the hidden flag on the target site. Start with basic recon and review static assets.",
+  "target": "http://127.0.0.1:8080",
+  "flag_format": "flag\\{[^{}\\n]+\\}",
+  "attachments": []
+}

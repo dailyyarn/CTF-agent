@@ -1,0 +1,4 @@
+heap
+tcache
+__free_hook
+tcache poisoning

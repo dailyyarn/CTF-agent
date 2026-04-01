@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Intel Lab Dynamic About</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <main>
+    <h1>Intel Lab</h1>
+    <p id="status">Loading analyst profile...</p>
+    <section id="profile"></section>
+  </main>
+  <script>
+    window.__intelSeed = {
+      handle: "@ctfintel",
+      email: "analyst@intel-lab.example.org",
+      domain: "intel-lab.example.org"
+    };
+  </script>
+  <script src="/osint_dynamic_app.js"></script>
+  <script>
+    window.__intelHydrate = true;
+  </script>
+</body>
+</html>

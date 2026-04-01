@@ -1,0 +1,5 @@
+// nodejail warmup
+// blacklist: process require child_process fs
+// hint: decode the literal before choosing a payload
+const encoded = "ZmxhZ3tub2RlamFpbF9iNjR9";
+console.log("sandbox ready");

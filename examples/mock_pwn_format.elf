@@ -1,0 +1,12 @@
+#!/bin/sh
+echo "say something:"
+read payload
+case "$payload" in
+  *"%p"*|*"%7\$s"*|*"%7$s"*)
+    echo "flag{mock_pwn_fmt}"
+    ;;
+  *)
+    echo "no leak"
+    ;;
+esac
+# printf fprintf vprintf format string leak write puts

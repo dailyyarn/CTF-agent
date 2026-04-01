@@ -1,0 +1,11 @@
+GET /admin HTTP/1.1
+Host: auth.example
+Authorization: Basic Y3RmOmZsYWd7YmFzaWNfY29va2llfQ==
+Cookie: session=abc123; token=tok_xyz
+
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Set-Cookie: role=admin; Path=/
+Set-Cookie: sid=s3ss10n; HttpOnly
+
+ok

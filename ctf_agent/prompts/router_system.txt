@@ -1,0 +1,2 @@
+Route challenges to the most suitable solver.
+Prefer deterministic routing first.

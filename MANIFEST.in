@@ -1,0 +1,8 @@
+include README.md
+include LICENSE
+include THIRD_PARTY_NOTICES.md
+recursive-include ctf_agent/web_templates *.html
+recursive-include ctf_agent/knowledge/embedded_ctf_skills *.md
+include ctf_agent/knowledge/embedded_ctf_skills/LICENSE
+include ctf_agent/knowledge/embedded_ctf_skills/README.md
+include ctf_agent/knowledge/embedded_ctf_skills/.gitignore

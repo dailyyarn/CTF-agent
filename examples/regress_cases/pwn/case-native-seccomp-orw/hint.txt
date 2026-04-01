@@ -1,0 +1,4 @@
+seccomp sandbox
+open read write only
+orw
+prctl

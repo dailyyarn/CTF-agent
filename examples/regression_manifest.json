@@ -1,0 +1,77 @@
+{
+  "cases": [
+    {
+      "category": "crypto",
+      "title": "regression-crypto-common-modulus",
+      "attachment": "crypto_common_modulus.txt",
+      "expected_flag": "flag{common_modulus}"
+    },
+    {
+      "category": "crypto",
+      "title": "regression-crypto-low-e",
+      "attachment": "crypto_low_e.txt",
+      "expected_flag": "flag{e3}"
+    },
+    {
+      "category": "forensics",
+      "title": "regression-forensics-pcap-zip",
+      "attachment": "forensics_http_zip_body_flag.pcap",
+      "expected_flag": "flag{pcap_zip_body}"
+    },
+    {
+      "category": "misc",
+      "title": "regression-misc-nodejail",
+      "attachment": "misc_nodejail_base64_flag.txt",
+      "expected_flag": "flag{nodejail_b64}"
+    },
+    {
+      "category": "misc",
+      "title": "regression-misc-steghide",
+      "attachment": "misc_steghide_flag.bmp",
+      "expected_flag": "flag{steghide_empty_pass}"
+    },
+    {
+      "category": "osint",
+      "title": "regression-osint-attachment-dynamic",
+      "attachments": [
+        "osint_dynamic_index.html",
+        "osint_dynamic_app.js"
+      ],
+      "expected_flag": "flag{dynamic_osint}"
+    },
+    {
+      "category": "osint",
+      "title": "regression-osint-attachment-static",
+      "attachments": [
+        "osint_site/index.html",
+        "osint_site/profile.html",
+        "osint_contact_seed.txt"
+      ],
+      "expected_flag": "flag{osint_pivot}"
+    },
+    {
+      "category": "pwn",
+      "title": "regression-pwn-native-ret2win",
+      "attachment": "mock_pwn_native_ret2win.elf",
+      "expected_flag": "flag{mock_native_ret2win}"
+    },
+    {
+      "category": "pwn",
+      "title": "regression-pwn-native-systemrop",
+      "attachment": "mock_pwn_native_systemrop.elf",
+      "expected_flag": "flag{mock_native_systemrop}"
+    },
+    {
+      "category": "pwn",
+      "title": "regression-pwn-native-ret2libc",
+      "attachment": "mock_pwn_native_ret2libc.elf",
+      "expected_flag": "flag{mock_native_ret2libc}"
+    },
+    {
+      "category": "reverse",
+      "title": "regression-reverse-xor",
+      "attachment": "mock_reverse_xor.bin",
+      "expected_flag": "flag{mock_reverse_xor}"
+    }
+  ]
+}

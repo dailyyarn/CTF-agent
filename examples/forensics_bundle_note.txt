@@ -1,0 +1,3 @@
+Recovered object inside archive.
+URL: http://forensics.example/internal
+Flag: flag{forensics_zip}

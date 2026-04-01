@@ -1,0 +1,3 @@
+Use DNS to continue.
+Domain: openai.com
+Hint: inspect TXT / MX / NS first before wider pivots.

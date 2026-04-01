@@ -1,0 +1,7 @@
+Investigate the public footprint for analyst intel.
+Primary handle: @ctfintel
+Contact mailbox: analyst@intel-lab.example.org
+Backup mailbox: ops@intel-lab.example.org
+Known domain: intel-lab.example.org
+Known coordinate hint: 31.2304,121.4737
+Reference page: https://intel-lab.example.org/about

@@ -1,0 +1,4 @@
+ret2dlresolve
+_dl_runtime_resolve
+link_map
+partial relro

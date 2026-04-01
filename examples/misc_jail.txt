@@ -1,0 +1,4 @@
+Welcome to the pyjail demo.
+blacklist = ['import', 'open', 'exec', 'eval']
+whitelist = ['print', 'len', 'str']
+Goal: recover the next object chain without using __import__ directly.

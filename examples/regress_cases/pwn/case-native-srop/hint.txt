@@ -1,0 +1,4 @@
+sigreturn
+rt_sigreturn
+syscall; ret
+srop frame

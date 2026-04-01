@@ -1,0 +1,8 @@
+{
+  "title": "regression-dir-pwn-native-srop",
+  "attachments": [
+    "F:/codex/ctf-agent/examples/mock_pwn_native_rop.elf",
+    "F:/codex/ctf-agent/examples/regress_cases/pwn/case-native-srop/hint.txt"
+  ],
+  "expected_flag": ""
+}

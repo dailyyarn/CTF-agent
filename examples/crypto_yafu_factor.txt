@@ -1,0 +1,5 @@
+n=1000000016000000063
+e=65537
+c=678017541827030242
+
+Recover the plaintext from this small-factor RSA instance.

@@ -1,0 +1,9 @@
+{
+  "title": "regression-dir-osint-static-local",
+  "attachments": [
+    "F:/codex/ctf-agent/examples/osint_site/index.html",
+    "F:/codex/ctf-agent/examples/osint_site/profile.html",
+    "F:/codex/ctf-agent/examples/osint_contact_seed.txt"
+  ],
+  "expected_flag": "flag{osint_pivot}"
+}

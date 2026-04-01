@@ -1,0 +1,2 @@
+xor challenge
+hex=717b76706c6f78654873727a786a

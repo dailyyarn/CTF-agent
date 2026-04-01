@@ -1,0 +1,6 @@
+# authorized misc jail sample
+blacklist = ['import', 'open', 'exec', 'eval']
+whitelist = ['print', 'len', 'str', 'globals']
+flag = 'flag{pyjail_literal}'
+expr = input('> ')
+print(eval(expr))

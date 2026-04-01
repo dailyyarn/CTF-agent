@@ -1,0 +1,5 @@
+{
+  "title": "regression-dir-misc-node",
+  "attachment": "F:/codex/ctf-agent/examples/misc_nodejail_base64_flag.txt",
+  "expected_flag": "flag{nodejail_b64}"
+}

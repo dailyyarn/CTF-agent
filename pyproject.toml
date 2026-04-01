@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=41.2", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ctf-agent"
+version = "1.0.0"
+description = "AI-powered CTF solver with LLM reasoning, RAG knowledge retrieval, and reproducible workspaces."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+  "paramiko>=3.5.0",
+  "selenium>=4.27.0",
+]
+
+[project.optional-dependencies]
+web = [
+  "fastapi>=0.115.0",
+  "jinja2>=3.1.0",
+  "python-multipart>=0.0.9",
+  "uvicorn>=0.30.0,<0.31.0",
+]
+
+[project.scripts]
+ctf-agent = "ctf_agent.__main__:main"
+ctf-agent-mcp = "ctf_agent.mcp_server:main"
+ctf-agent-browser-mcp = "ctf_agent.browser_mcp_server:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["ctf_agent*"]
+
+[tool.setuptools.package-data]
+ctf_agent = [
+  "web_templates/*.html",
+  "knowledge/embedded_ctf_skills/LICENSE",
+  "knowledge/embedded_ctf_skills/README.md",
+  "knowledge/embedded_ctf_skills/.gitignore",
+  "knowledge/embedded_ctf_skills/*/*.md",
+]

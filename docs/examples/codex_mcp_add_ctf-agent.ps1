@@ -1,0 +1,2 @@
+$ErrorActionPreference = 'Stop'
+codex mcp add ctf-agent -- ctf-agent-mcp --stdio --config <REPO_ROOT>\local_config.json --workspace-root <WORKSPACE_ROOT>

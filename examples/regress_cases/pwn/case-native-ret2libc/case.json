@@ -1,0 +1,5 @@
+{
+  "title": "regression-dir-pwn-native-ret2libc",
+  "attachment": "F:/codex/ctf-agent/examples/mock_pwn_native_ret2libc.elf",
+  "expected_flag": "flag{mock_native_ret2libc}"
+}

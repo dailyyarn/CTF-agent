@@ -1,0 +1,8 @@
+{
+  "title": "regression-dir-osint-dynamic-local",
+  "attachments": [
+    "F:/codex/ctf-agent/examples/osint_dynamic_index.html",
+    "F:/codex/ctf-agent/examples/osint_dynamic_app.js"
+  ],
+  "expected_flag": "flag{dynamic_osint}"
+}

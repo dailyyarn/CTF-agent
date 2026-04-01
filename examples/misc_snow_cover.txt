@@ -1,0 +1,4 @@
+This is a plain looking note.
+Nothing unusual should stand out.
+Whitespace is easy to ignore.
+CTF misc text sample.

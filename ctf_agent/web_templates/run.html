@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>{{ board.run.meta.title or run.challenge_title }} - CTF Agent</title>
+  <style>
+    body { font-family: "Segoe UI", sans-serif; margin: 0; background: #020617; color: #e2e8f0; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 24px; }
+    .top { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 18px; box-shadow: 0 16px 36px rgba(0,0,0,.22); }
+    .span-4 { grid-column: span 4; }
+    .span-6 { grid-column: span 6; }
+    .span-12 { grid-column: span 12; }
+    h1, h2, h3 { margin-top: 0; }
+    .muted { color: #94a3b8; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; background: #1d4ed8; }
+    .status-running { background: #854d0e; }
+    .status-solved { background: #166534; }
+    .status-failed { background: #991b1b; }
+    .status-unresolved { background: #334155; }
+    ul { margin: 0; padding-left: 18px; }
+    li { margin: 6px 0; }
+    code, pre { background: #020617; border-radius: 10px; }
+    pre { padding: 12px; overflow: auto; font-size: 12px; }
+    button { background: #1f2937; color: #e2e8f0; border: 1px solid #334155; border-radius: 999px; padding: 10px 14px; cursor: pointer; }
+    a { color: #7dd3fc; text-decoration: none; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid #1e293b; vertical-align: top; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>{{ board.run.meta.title or run.challenge_title }}</h1>
+        <div class="muted">run_id={{ board.run.meta.run_id or run.run_id }} / workspace={{ board.run.meta.workspace }}</div>
+      </div>
+      <div>
+        <span class="badge status-{{ board.run.meta.status or run.status }}">{{ board.run.meta.status or run.status }}</span>
+        <button id="cancel-btn">Cancel Run</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card span-4">
+        <h2>Metadata</h2>
+        <ul>
+          <li>Category: {{ board.run.meta.category }}</li>
+          <li>Solver: {{ board.run.meta.solver or run.result.solver if run.result else "-" }}</li>
+          <li>Target: {{ board.target_summary.target or "-" }}</li>
+          <li>Recommended Path: {{ board.target_summary.recommended_path or "-" }}</li>
+          <li>Browser MCP: {{ board.input_summary.use_browser_mcp }}</li>
+          <li>Remote Host: {{ board.input_summary.use_remote_host or "-" }}</li>
+        </ul>
+      </section>
+
+      <section class="card span-4">
+        <h2>Candidate Flags</h2>
+        <ul>
+          {% for item in board.candidate_flags %}
+          <li><code>{{ item.value }}</code> ({{ "%.2f"|format(item.confidence) }}, reproducible={{ item.reproducible }})</li>
+          {% else %}
+          <li class="muted">No candidate flags yet.</li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section class="card span-4">
+        <h2>Next Actions</h2>
+        <ul>
+          {% for item in board.next_actions %}
+          <li>{{ item }}</li>
+          {% else %}
+          <li class="muted">No suggested next actions.</li>
+          {% endfor %}
+        </ul>
+        {% if board.blockers %}
+        <h3 style="margin-top:16px;">Blockers</h3>
+        <ul>
+          {% for item in board.blockers %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </section>
+
+      <section class="card span-6">
+        <h2>Findings</h2>
+        <table>
+          <thead><tr><th>Source</th><th>Summary</th><th>Evidence</th><th>Confidence</th></tr></thead>
+          <tbody>
+            {% for item in board.findings %}
+            <tr>
+              <td>{{ item.source }}</td>
+              <td>{{ item.summary }}</td>
+              <td>{{ item.evidence }}</td>
+              <td>{{ "%.2f"|format(item.confidence) }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="muted">No findings yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card span-6">
+        <h2>Exploit Plans</h2>
+        <table>
+          <thead><tr><th>Title</th><th>Method</th><th>URL</th><th>Confidence</th></tr></thead>
+          <tbody>
+            {% for item in board.exploit_plans %}
+            <tr>
+              <td>{{ item.title }}</td>
+              <td>{{ item.method }}</td>
+              <td>{{ item.url }}</td>
+              <td>{{ "%.2f"|format(item.confidence) }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="muted">No exploit plans yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card span-6">
+        <h2>Artifacts / Tools / MCP / Remote</h2>
+        <h3>Attachments</h3>
+        <ul>
+          {% for item in board.attachments %}
+          <li>{{ item.name or item.path }}{% if item.kind %} / {{ item.kind }}{% endif %}</li>
+          {% else %}
+          <li class="muted">No attachments.</li>
+          {% endfor %}
+        </ul>
+        <h3 style="margin-top:16px;">Tools</h3>
+        <div class="muted">configured: {{ board.tool_usage.configured|join(", ") if board.tool_usage.configured else "-" }}</div>
+        <div class="muted">used: {{ board.tool_usage.used|join(", ") if board.tool_usage.used else "-" }}</div>
+        <div class="muted">recommended: {{ board.tool_usage.recommended_tools|join(", ") if board.tool_usage.recommended_tools else "-" }}</div>
+        <h3 style="margin-top:16px;">MCP</h3>
+        <div class="muted">servers: {{ board.mcp_usage.available_servers|join(", ") if board.mcp_usage.available_servers else "-" }}</div>
+        <div class="muted">recommended: {{ board.mcp_usage.recommended_mcp|join(", ") if board.mcp_usage.recommended_mcp else "-" }}</div>
+        <h3 style="margin-top:16px;">Remote</h3>
+        <div class="muted">available: {{ board.remote_usage.available_hosts|join(", ") if board.remote_usage.available_hosts else "-" }}</div>
+        <div class="muted">selected: {{ board.remote_usage.selected_host or "-" }}</div>
+      </section>
+
+      <section class="card span-6">
+        <h2>Action Timeline</h2>
+        <table>
+          <thead><tr><th>Phase</th><th>Action</th><th>Status</th><th>Summary</th></tr></thead>
+          <tbody>
+            {% for item in board.action_timeline %}
+            <tr>
+              <td>{{ item.phase }}</td>
+              <td>{{ item.action }}</td>
+              <td>{{ item.status }}</td>
+              <td>{{ item.summary }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="muted">No timeline yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card span-12">
+        <h2>Artifacts</h2>
+        <ul>
+          <li><a href="/api/runs/{{ run.run_id }}/artifact?path=notes.md" target="_blank">notes.md</a></li>
+          <li><a href="/api/runs/{{ run.run_id }}/artifact?path=state.json" target="_blank">state.json</a></li>
+          <li><a href="/api/runs/{{ run.run_id }}/artifact?path=runs.jsonl" target="_blank">runs.jsonl</a></li>
+          <li><a href="/api/runs/{{ run.run_id }}/artifact?path=solution.py" target="_blank">solution.py</a></li>
+          {% for item in artifacts %}
+          <li><a href="/api/runs/{{ run.run_id }}/artifact?path={{ item.relative_path | urlencode }}" target="_blank">{{ item.relative_path }}</a></li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("cancel-btn");
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      await fetch("/api/runs/{{ run.run_id }}/cancel", { method: "POST" });
+      window.location.reload();
+    });
+    setTimeout(() => window.location.reload(), 15000);
+  </script>
+</body>
+</html>

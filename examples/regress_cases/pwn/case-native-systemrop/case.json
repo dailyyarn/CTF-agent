@@ -1,0 +1,5 @@
+{
+  "title": "regression-dir-pwn-native-systemrop",
+  "attachment": "F:/codex/ctf-agent/examples/mock_pwn_native_systemrop.elf",
+  "expected_flag": "flag{mock_native_systemrop}"
+}

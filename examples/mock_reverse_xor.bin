@@ -1,0 +1,8 @@
+#!/bin/sh
+read payload
+if [ "$payload" = "opensesame" ]; then
+  echo "flag{mock_reverse_xor}"
+else
+  echo "wrong"
+fi
+# strcmp xor decode rot base64 b3BlbnNlc2FtZQ== correct wrong

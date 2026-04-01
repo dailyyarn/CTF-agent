@@ -1,0 +1,5 @@
+{
+  "title": "regression-dir-crypto-common",
+  "attachment": "F:/codex/ctf-agent/examples/crypto_common_modulus.txt",
+  "expected_flag": "flag{common_modulus}"
+}

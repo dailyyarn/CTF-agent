@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>CTF Agent Console</title>
+  <style>
+    body { font-family: "Segoe UI", sans-serif; margin: 0; background: #0f172a; color: #e2e8f0; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; }
+    .grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+    .card { background: #111827; border: 1px solid #23304a; border-radius: 16px; padding: 18px; box-shadow: 0 20px 40px rgba(0,0,0,.18); }
+    h1, h2 { margin-top: 0; }
+    .muted { color: #94a3b8; }
+    label { display: block; font-size: 14px; margin-bottom: 8px; color: #cbd5e1; }
+    input, select, textarea { width: 100%; box-sizing: border-box; background: #0b1220; color: #e2e8f0; border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-top: 6px; }
+    input[type="file"] { padding: 9px; }
+    textarea { min-height: 96px; resize: vertical; }
+    .task-box { min-height: 132px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .actions { display: flex; gap: 12px; align-items: center; }
+    button { background: linear-gradient(135deg, #22c55e, #0ea5e9); color: white; border: none; border-radius: 999px; padding: 11px 18px; font-weight: 600; cursor: pointer; }
+    details { margin-top: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #1f2937; vertical-align: top; }
+    a { color: #7dd3fc; text-decoration: none; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 999px; font-size: 12px; background: #1d4ed8; }
+    .status-running { background: #854d0e; }
+    .status-solved { background: #166534; }
+    .status-failed { background: #991b1b; }
+    .status-unresolved { background: #374151; }
+    .tiny { font-size: 12px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>CTF Agent Local Console</h1>
+    <p class="muted">Submit an authorized CTF task, URL, or attachments. The console shares the same intake, runtime, workspace, and triage board used by the CLI and MCP hub.</p>
+    <div class="grid">
+      <section class="card">
+        <h2>Submit Task</h2>
+        <details style="margin-bottom: 16px;">
+          <summary>Canonical Task Template</summary>
+          <pre style="white-space: pre-wrap; background:#0b1220; border:1px solid #334155; border-radius:10px; padding:12px; overflow:auto;">{{ task_template }}</pre>
+        </details>
+        <form id="intake-form">
+          <label>Task / Prompt / Challenge Description
+            <textarea class="task-box" name="task" placeholder="Paste the short task template or the raw challenge text. Intake will normalize it before execution."></textarea>
+          </label>
+          <div class="row">
+            <label>Category
+              <select name="category">
+                <option value="">auto-detect</option>
+                <option value="web">web</option>
+                <option value="misc">misc</option>
+                <option value="pwn">pwn</option>
+                <option value="re">re</option>
+                <option value="reverse">reverse</option>
+                <option value="crypto">crypto</option>
+                <option value="forensics">forensics</option>
+                <option value="osint">osint</option>
+                <option value="malware">malware</option>
+              </select>
+            </label>
+            <label>Target (URL, host:port, or local path)
+              <input type="text" name="target" placeholder="http://target or C:\path\to\file">
+            </label>
+          </div>
+          <label>Attachments
+            <input type="file" name="attachments" multiple>
+          </label>
+          <details>
+            <summary>Advanced Options</summary>
+            <div class="row" style="margin-top: 12px;">
+              <label>Title
+                <input type="text" name="title" placeholder="Optional title override">
+              </label>
+              <label>Flag Format
+                <input type="text" name="flag_format" placeholder="flag\{[^{}\n]+\}">
+              </label>
+            </div>
+            <div class="row">
+              <label>Hint
+                <textarea name="hint" placeholder="Optional hint or operator note"></textarea>
+              </label>
+              <label>Remote Host
+                <select name="use_remote_host">
+                  <option value="">auto-select / none</option>
+                  {% for host in remote_hosts %}
+                  <option value="{{ host }}">{{ host }}</option>
+                  {% endfor %}
+                </select>
+              </label>
+            </div>
+            <div class="row">
+              <label>Max Rounds
+                <input type="number" name="max_rounds" placeholder="Leave empty for category defaults">
+              </label>
+              <label>Browser MCP
+                <select name="use_browser_mcp">
+                  <option value="">category default</option>
+                  <option value="true">enabled</option>
+                  <option value="false">disabled</option>
+                </select>
+              </label>
+            </div>
+          </details>
+          <div class="actions" style="margin-top: 16px;">
+            <button type="submit">Start Run</button>
+            <span class="tiny">workspace root: {{ workspace_root }}</span>
+          </div>
+        </form>
+        <div id="intake-result" class="tiny" style="margin-top: 14px;"></div>
+      </section>
+
+      <section class="card">
+        <h2>Recent Runs</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Solver</th>
+              <th>Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in recent_runs %}
+            <tr>
+              <td>
+                {% if item.run_id %}
+                <a href="/runs/{{ item.run_id }}">{{ item.title }}</a>
+                {% else %}
+                {{ item.title }}
+                {% endif %}
+                <div class="tiny">{{ item.category }}{% if item.target %} / {{ item.target }}{% endif %}</div>
+              </td>
+              <td><span class="badge status-{{ item.status|default('unresolved') }}">{{ item.status or "unknown" }}</span></td>
+              <td>{{ item.solver or "-" }}</td>
+              <td>{{ item.updated_at_display }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="muted">No runs yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("intake-form");
+    const resultBox = document.getElementById("intake-result");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      resultBox.textContent = "Creating run...";
+      const formData = new FormData(form);
+      const response = await fetch("/api/intake", { method: "POST", body: formData });
+      const payload = await response.json();
+      if (!response.ok || !payload.ok) {
+        resultBox.textContent = "Create failed: " + JSON.stringify(payload);
+        return;
+      }
+      resultBox.textContent = "Run created. Redirecting...";
+      window.location.href = payload.redirect_url;
+    });
+  </script>
+</body>
+</html>

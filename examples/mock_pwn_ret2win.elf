@@ -1,0 +1,9 @@
+#!/bin/sh
+echo "payload:"
+read payload
+if [ "$payload" = "RET2WIN" ]; then
+  echo "flag{mock_pwn_ret2win}"
+else
+  echo "try again"
+fi
+# win puts printf read system /bin/sh ret2win give_flag

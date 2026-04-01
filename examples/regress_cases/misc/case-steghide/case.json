@@ -1,0 +1,5 @@
+{
+  "title": "regression-dir-misc-steghide",
+  "attachment": "F:/codex/ctf-agent/examples/misc_steghide_flag.bmp",
+  "expected_flag": "flag{steghide_empty_pass}"
+}
